@@ -16,7 +16,6 @@ def get_expr(s, ex_start, ex_end, ex_arg_f):
         j = i + len(ex_start)
         while j < len(s) and ex_arg_f(s[j]):
             j += 1
-            continue
         if j < len(s) and s[j] == ex_end:
             j += 1
             yield i, s[i:j]
