@@ -22,28 +22,36 @@ def load_equations(f):
     return equations
 
 
-def solution(equations, operators):
+def equation_valid(result, numbers, operators):
+    for op_arrangement in product(operators, repeat=len(numbers) - 1):
+        subresult = numbers[0]
+        for operator, n in zip(op_arrangement, numbers[1:]):
+            subresult = operator(subresult, n)
+        if subresult == result:
+            return True
+
+    return False
+
+
+def solution(equations, operators, use_concat):
     total_result = 0
+    op_extended = operators + [lambda x, y: int(str(x) + str(y))]
+
     for result, numbers in equations:
-        for operator_group in product(operators, repeat=len(numbers) - 1):
-            subresult = numbers[0]
-            for operator, n in zip(operator_group, numbers[1:]):
-                subresult = operator(subresult, n)
-            if subresult == result:
-                total_result += result
-                break
+        if (
+            equation_valid(result, numbers, operators)
+            or use_concat
+            and equation_valid(result, numbers, op_extended)
+        ):
+            total_result += result
 
     return total_result
 
 
 def main():
     equations = load_equations(F)
-
-    operators = OPERATORS.copy()
-    print(solution(equations, operators))  # 2314935962622
-
-    operators.append(lambda x, y: int(str(x) + str(y)))
-    print(solution(equations, operators))  # 401477450831495
+    print(solution(equations, OPERATORS, False))  # 2314935962622
+    print(solution(equations, OPERATORS, True))  # 401477450831495
 
 
 if __name__ == "__main__":
