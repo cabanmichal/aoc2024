@@ -40,13 +40,12 @@ def group_antenas_by_freq(grid):
 def get_antinodes_of_two_antenas(grid, position1, position2):
     r1, c1 = position1
     r2, c2 = position2
-
     ra1 = r1 + (r1 - r2)
     ra2 = r2 + (r2 - r1)
     ca1 = c1 + (c1 - c2)
     ca2 = c2 + (c2 - c1)
-
     antinodes = []
+
     for location in [(ra1, ca1), (ra2, ca2)]:
         if is_location_in_grid(grid, location):
             antinodes.append(location)
